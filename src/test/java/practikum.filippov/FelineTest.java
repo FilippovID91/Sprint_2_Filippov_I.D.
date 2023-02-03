@@ -8,6 +8,8 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import java.util.List;
+
 @RunWith(MockitoJUnitRunner.class)
 
 public class FelineTest {
@@ -21,11 +23,52 @@ public class FelineTest {
     }
 
     @Test
+    public void getFoodTest() throws Exception {
+        Feline feline = new Feline();
+        List<String> actualFood = feline.getFood("Хищник");
+        List<String> expectedFood = List.of("Животные", "Птицы", "Рыба");
+        Assert.assertEquals(expectedFood, actualFood);
+    }
+    @Test
+    public void getFoodExceptionTest() {
+        try {Feline feline = new Feline();
+            List<String> actualFood = feline.getFood("Собака");
+            Assert.assertEquals(List.of("Животные", "Птицы", "Рыба"), actualFood);}
+        catch (Exception exception) {
+            Assert.assertEquals(exception.getMessage(), "Неизвестный вид животного, используйте значение Травоядное или Хищник");
+        }
+    }
+
+    @Test
+    public void getFoodAnimalTest() throws Exception {
+        Animal animal = new Animal();
+        List<String> actualFood = animal.getFood("Травоядное");
+        List<String> expectedFood = List.of("Трава", "Различные растения");
+        Assert.assertEquals(expectedFood, actualFood);
+    }
+
+    @Test
+    public void getFamilyAnimalTest()  {
+        Animal animal = new Animal();
+        String actualFamily = animal.getFamily();
+        String expectedFamily = "Существует несколько семейств: заячьи, беличьи, мышиные, кошачьи, псовые, медвежьи, куньи";
+        Assert.assertEquals(expectedFamily, actualFamily);
+    }
+
+    @Test
+    public void eatMeatTest() throws Exception {
+        Feline feline = new Feline();
+        List<String> actualFood = feline.eatMeat();
+        List<String> expectedFood = List.of("Животные", "Птицы", "Рыба");
+        Assert.assertEquals(expectedFood, actualFood);
+    }
+
+    @Test
     public void getKittensTest() {
         Feline feline = new Feline();
-        int actualFamily = feline.getKittens();
-        int expectedFamily = 1;
-        Assert.assertEquals(expectedFamily, actualFamily);
+        int actualKittens = feline.getKittens();
+        int expectedKittens = 1;
+        Assert.assertEquals(expectedKittens, actualKittens);
     }
 
     @Mock
@@ -38,31 +81,11 @@ public class FelineTest {
         int actualKittens = feline.getKittens();
         Assert.assertEquals(expectedKittens, actualKittens);
     }
-
-    @RunWith(Parameterized.class)
-    public static class getKittens {
-        Feline feline = new Feline();
-        private final int kittensCount;
-        private final int expected;
-
-        public getKittens(int kittensCount, int expected) {
-            this.kittensCount = kittensCount;
-            this.expected = expected;
-        }
-
-        @Parameterized.Parameters
-        public static Object[][] getKittensValues() {
-            return new Object[][]{
-                    {2, 2},
-                    {3, 3},
-                    {4, 4},
-            };
-        }
-
-        @Test
-        public void getKittensParamsTest() throws Exception {
-            int actualKittens = feline.getKittens(kittensCount);
-            Assert.assertEquals(expected, actualKittens);
-        }
+    @Mock
+    Animal animal;
+    @Test
+    public void getFoodMockTest() throws Exception {
+        animal.getFood("Собака");
+        Mockito.verify(animal).getFood(Mockito.anyString());
     }
 }

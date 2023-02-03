@@ -33,11 +33,31 @@ public class LionTest {
     @Test
     public void haveManeExceptionTest() {
         try {
-            Lion lion = new Lion("Неопредилившийся", feline);
+            Lion lion = new Lion("детеныш", feline);
+            boolean mane =  lion.doesHaveMane();
+            Assert.assertTrue(mane);
         }
         catch (Exception exception) {
-            assertEquals("Используйте допустимые значения пола животного - самец или самка", exception.getMessage());
+            Assert.assertEquals(exception.getMessage(),"Используйте допустимые значения пола животного - самец или самка");
         }
+    }
+
+    @Test
+    public void getKittensTest() throws Exception {
+        Feline feline = new Feline();
+        Lion lion = new Lion("Самка", feline);
+        int actualKittens =  lion.getKittens();
+        int expectedKittens =  1;
+        Assert.assertEquals(expectedKittens, actualKittens);
+    }
+
+    @Test
+    public void getFoodTest() throws Exception {
+        Feline feline = new Feline();
+        Lion lion = new Lion("Самка", feline);
+        List<String> actualFood = lion.getFood();
+        List<String> expectedFood = List.of("Животные", "Птицы", "Рыба");
+        Assert.assertEquals(expectedFood, actualFood);
     }
 
     @Mock
@@ -49,7 +69,7 @@ public class LionTest {
         Mockito.when(feline.getKittens()).thenReturn(1);
         int expectedKittens = 1;
         int actualKittens = lion.getKittens();
-        assertEquals(expectedKittens, actualKittens);
+        Assert.assertEquals(expectedKittens, actualKittens);
     }
 
     @Test
@@ -58,6 +78,6 @@ public class LionTest {
         Mockito.when(feline.getFood("Хищник")).thenReturn(List.of("Животные", "Птицы", "Рыба"));
         List<String> expectedFood = List.of("Животные", "Птицы", "Рыба");
         List<String> actualFood = lion.getFood();
-        assertEquals(expectedFood, actualFood);
+        Assert.assertEquals(expectedFood, actualFood);
     }
 }
